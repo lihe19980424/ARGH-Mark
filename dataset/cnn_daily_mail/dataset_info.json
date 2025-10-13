@@ -1,0 +1,10 @@
+{
+  "train": {
+    "file_name": "train.json",
+    "file_sha1": "02f11c633dd56b06d49949fc8974b144c97c9b60"
+  },
+  "test": {
+    "file_name": "test.json",
+    "file_sha1": "6385c1d206c66fe20ea299c5dc0b47e92a748225"
+  }
+}
