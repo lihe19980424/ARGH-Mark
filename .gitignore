@@ -1,5 +1,3 @@
-# 创建.gitignore文件
-cat > .gitignore << 'EOF'
 # Python
 __pycache__/
 *.py[cod]
@@ -39,9 +37,11 @@ datasets/
 *.csv
 *.parquet
 
-# Model files (避免上传大模型)
-# models/
-# *.safetensors
+Model files (避免上传大模型)
+models/*.pth
+models/*.bin
+models/*.safetensors
+!models/*.py  # 重要：不忽略Python代码文件
 
 # Environment
 .env
@@ -71,4 +71,10 @@ Thumbs.db
 *.tmp
 *.temp
 .cache/
-EOF
+
+# 忽略results目录下的数据文件，但保留目录结构
+results/*.log
+results/*.json
+results/*.csv
+results/*.pkl
+!results/.gitkeep
