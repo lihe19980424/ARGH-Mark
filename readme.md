@@ -4,18 +4,16 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-1.9+-ee4c2c.svg)](https://pytorch.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Official implementation of **ARGH-Mark**, a robust multi-bit watermarking framework for Large Language Models (LLMs) that combines anchor synchronization with Hamming error correction codes to achieve high detection accuracy while preserving text quality.
+This repository contains the official implementation of the paper **"ARGH-Mark: Anchor-Synchronized Watermarking with Hamming Correction for Robust and Quality-Preserving LLM Attribution"**. ARGH-Mark is a novel watermarking framework for Large Language Models (LLMs) that enables robust attribution of generated text while preserving text quality, leveraging anchor synchronization and Hamming correction techniques.
 
 ## 📖 Overview
 
-ARGH-Mark addresses the limitations of existing LLM watermarking methods by introducing:
+ARGH-Mark addresses the critical challenge of LLM-generated text attribution by embedding imperceptible watermarks that resist adversarial attacks and maintain high text quality. Key innovations include:
+- **Anchor Synchronization**: Uses predefined anchor sequences (e.g., "10101010") to align watermark embedding/detection, ensuring temporal consistency.
+- **Hamming Correction**: Integrates Hamming code-based error correction to enhance robustness against noise and adversarial perturbations.
+- **Quality Preservation**: Minimizes impact on text fluency and coherence through optimized token selection strategies.
 
-- **Anchor Synchronization**: Periodic anchor sequences for robust watermark detection
-- **Hamming Error Correction**: Multiple Hamming code variants (4, 8, 16, 32-bit) for error resilience
-- **Multi-bit Watermarking**: Support for embedding arbitrary binary messages
-- **Attack Resistance**: Robust against insertion, deletion, and replacement attacks
-
-This repository contains the complete implementation for watermark embedding, detection, and comprehensive evaluation.
+The framework supports various LLM configurations (e.g., different quantization levels: 4bit, 8bit, 16bit, 32bit) and is evaluated on adversarial scenarios to demonstrate robustness.
 
 ## 🚀 Quick Start
 
@@ -292,146 +290,3 @@ For questions about this code or research, please contact:
 
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# ARGH-Mark: Anchor-Synchronized Watermarking with Hamming Correction for Robust and Quality-Preserving LLM Attribution
-
-This repository contains the official implementation of the paper **"ARGH-Mark: Anchor-Synchronized Watermarking with Hamming Correction for Robust and Quality-Preserving LLM Attribution"**. ARGH-Mark is a novel watermarking framework for Large Language Models (LLMs) that enables robust attribution of generated text while preserving text quality, leveraging anchor synchronization and Hamming correction techniques.
-
-
-## Overview
-
-ARGH-Mark addresses the critical challenge of LLM-generated text attribution by embedding imperceptible watermarks that resist adversarial attacks and maintain high text quality. Key innovations include:
-- **Anchor Synchronization**: Uses predefined anchor sequences (e.g., "10101010") to align watermark embedding/detection, ensuring temporal consistency.
-- **Hamming Correction**: Integrates Hamming code-based error correction to enhance robustness against noise and adversarial perturbations.
-- **Quality Preservation**: Minimizes impact on text fluency and coherence through optimized token selection strategies.
-
-The framework supports various LLM configurations (e.g., different quantization levels: 4bit, 8bit, 16bit, 32bit) and is evaluated on adversarial scenarios to demonstrate robustness.
-
-
-## Installation
-
-### Prerequisites
-- Python 3.8+
-- PyTorch 1.10+
-- Hugging Face `transformers`, `datasets`, and `accelerate`
-- Additional dependencies: `numpy`, `jsonlines`, `tqdm`, `scipy`
-
-### Setup
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/lihe19980424/ARGH.git
-   cd ARGH-Mark
-   ```
-
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-
-## Usage
-
-### Watermark Embedding
-To generate text with ARGH-Mark watermarking, use the `embed_watermark.py` script. Example:
-```bash
-python embed_watermark.py \
-  --model_name_or_path facebook/opt-1.3b \
-  --quantization 4bit \
-  --input_prompt "Your input prompt here..." \
-  --embedded_message "11001100" \  # Binary message to embed
-  --output_file results/watermarked_text.json \
-  --max_length 384 \
-  --watermark_params delta=5.0,period=8,hamming_type=8,anchor_sequence=10101010
-```
-
-### Watermark Detection
-To detect the embedded message from watermarked text, use `detect_watermark.py`:
-```bash
-python detect_watermark.py \
-  --model_name_or_path facebook/opt-1.3b \
-  --quantization 4bit \
-  --input_file results/watermarked_text.json \
-  --output_file results/detection_results.json \
-  --watermark_params delta=5.0,period=8,hamming_type=8,anchor_sequence=10101010
-```
-
-
-## Experimental Reproduction
-
-### Datasets
-Experiments in the paper use the [C4 dataset](https://huggingface.co/datasets/c4) (a large-scale corpus of web text). To reproduce results:
-1. Download the C4 dataset:
-   ```python
-   from datasets import load_dataset
-   c4 = load_dataset("c4", "en", split="train[:10000]")  # Adjust split as needed
-   ```
-
-2. Generate adversarial samples (as in the paper) using `generate_adversarial_samples.py`:
-   ```bash
-   python generate_adversarial_samples.py \
-     --model_name_or_path facebook/opt-1.3b \
-     --quantization 4bit \
-     --dataset c4 \
-     --num_samples 100 \
-     --max_length 384 \
-     --output_dir results/
-   ```
-
-### Key Experiments
-- **Robustness to Adversarial Attacks**: Evaluate detection accuracy on perturbed text (see `results/watermark_adversarial_samples_*.json` for sample outputs).
-- **Quality Preservation**: Measure perplexity differences between watermarked and non-watermarked text (scripts in `results/watermark_evaluation_.py`).
-- **Parameter Sensitivity**: Test different `delta`, `period`, and `hamming_type` values (see `configs/args.py` for configurations).
-
-
-
-## Watermark Parameters
-Key parameters (as used in `watermark_parameters`):
-- `delta`: Controls the strength of token bias (default: 5.0).
-- `period`: Interval (in tokens) for anchor synchronization (default: 8).
-- `hamming_type`: Length of Hamming code blocks (default: 8, 16).
-- `anchor_sequence`: Predefined binary sequence for synchronization (default: "10101010").
-- `cycles_per_anchor`: Number of embedding cycles per anchor (default: 1).
-- `hamming_blocks_per_cycle`: Number of Hamming blocks per cycle (default: 1).
-
-
-## Citation
-If you use this code or ARGH-Mark in your research, please cite our paper:
-```bibtex
-@inproceedings{yourname202Xarghmark,
-  title={ARGH-Mark: Anchor-Synchronized Watermarking with Hamming Correction for Robust and Quality-Preserving LLM Attribution},
-  author={Your Name and Co-Author 1 and Co-Author 2},
-  booktitle={Proceedings of the XYZ Conference on Machine Learning Research},
-  year={202X},
-  publisher={PMLR}
-}
-```
-
-
-## Contact
-For questions or issues, please contact [lihe2023@iie.ac.cn].
