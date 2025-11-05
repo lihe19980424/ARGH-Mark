@@ -40,8 +40,8 @@ datasets/
 *.parquet
 
 # Model files (避免上传大模型)
-models/
-*.safetensors
+# models/
+# *.safetensors
 
 # Environment
 .env
