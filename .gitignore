@@ -37,7 +37,7 @@ datasets/
 *.csv
 *.parquet
 
-Model files (避免上传大模型)
+# Model files (避免上传大模型)
 models/*.pth
 models/*.bin
 models/*.safetensors
