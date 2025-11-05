@@ -73,7 +73,7 @@ Thumbs.db
 .cache/
 
 # 忽略results目录下的数据文件，但保留目录结构
-results/*.log
+!results/*.log
 results/*.json
 results/*.csv
 results/*.pkl
