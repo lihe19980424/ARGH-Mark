@@ -5,7 +5,7 @@
 # 参数配置 - 在这里修改参数
 MODEL="opt-1.3b"
 DATASET="c4"
-TOTAL_SAMPLES=100
+TOTAL_SAMPLES=10
 MESSAGE_LENGTH=4
 DELTA=5.0
 EMBEDDED_MESSAGE="1100"
@@ -15,7 +15,7 @@ CYCLES_PER_ANCHOR=1
 HAMMING_BLOCKS_PER_CYCLE=1
 HAMMING_TYPE=8
 MAX_LENGTH=384
-DEVICE="cuda:0"  # 新增设备参数
+DEVICE="cuda:1"  # 新增设备参数
 
 echo "=== 运行ARGH水印评估 (8位汉明码) ==="
 echo "模型: $MODEL"
